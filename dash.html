@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Tracker Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+        }
+        #dashboard {
+            background: white;
+            width: 80%;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            font-size: 30px;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .section h3 {
+            color: #333;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+        .book-card {
+            width: 150px;
+            height: 200px;
+            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+            border-radius: 10px;
+            padding: 10px;
+            margin: 10px;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            color: #fff;
+            font-size: 14px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        .book-card:hover {
+            transform: scale(1.1);
+        }
+        .book-card h4 {
+            font-size: 16px;
+            margin: 0;
+            font-weight: bold;
+        }
+        .book-card p {
+            margin: 5px 0;
+            font-size: 12px;
+        }
+        input[type="text"], select {
+            padding: 10px;
+            width: 80%;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 12px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #bookList {
+            margin-top: 20px;
+        }
+        #suggestedReading {
+            margin-top: 40px;
+        }
+        #suggestedReading a {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        #suggestedReading a:hover {
+            text-decoration: underline;
+        }
+
+        /* Profile Picture Styling */
+        .profile-img {
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            margin-right: 15px;
+            object-fit: cover;
+        }
+        .profile-info {
+            display: flex;
+            align-items: center;
+        }
+        h2{
+
+        }
+        p{
+            text-align: center;
+            color:#000000;
+        }
+        .book-card {
+    width: 150px;
+    height: 220px; /* Set a fixed height to ensure uniformity */
+    background: linear-gradient(to right, #ff9a9e, #fad0c4);
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px;
+    display: inline-block;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+    transition: transform 0.3s;
+    overflow: hidden; /* Hide overflow to maintain the card shape */
+}
+
+.book-card:hover {
+    transform: scale(1.1);
+}
+
+.book-card h4 {
+    font-size: 16px;
+    margin: 0;
+    font-weight: bold;
+    white-space: normal; /* Allow wrapping of the book title */
+    word-wrap: break-word; /* Allow words to break and wrap onto the next line */
+    line-height: 1.2; /* Adjust line height for better readability */
+    max-height: 40px; /* Restrict the height of the title */
+}
+
+.book-card p {
+    margin: 5px 0;
+    font-size: 12px;
+    line-height: 1.4; /* Improve line height for better spacing */
+}
+
+    </style>
+</head>
+<body>
+
+    <div id="dashboard">
+        <h2 style="color:#5a37aa">FINEPRINT📚</h2>
+        <p> WHERE EVERY BOOK FIND ITS SHELF🪶</p>
+
+        <!-- User Profile Section -->
+        <div id="user-profile" class="section">
+            <h3>User Profile</h3>
+            <div class="profile-info">
+                <img src="kai.jpeg" alt="Profile Picture" class="profile-img">
+                <div>
+                    <div>
+                        <label for="user-name">Name:</label>
+                        <span id="user-name">Kai Azer</span>
+                    </div>
+                    <div>
+                        <label for="member-since">Member Since:</label>
+                        <span id="member-since">January 2022</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Book Section -->
+        <div id="add-book" class="section">
+            <h3>Add a New Book</h3>
+            <input type="text" id="book-title" placeholder="Book Title" required>
+            <input type="text" id="book-author" placeholder="Author" required>
+            <select id="book-genre">
+                <option value="Fantasy">Fantasy</option>
+                <option value="Mystery">Mystery</option>
+                <option value="Romance">Romance</option>
+                <option value="Adventure">Adventure</option>
+                <option value="Sci-Fi">Sci-Fi</option>
+            </select>
+            <select id="book-status">
+                <option value="read">Read</option>
+                <option value="in-progress">In Progress</option>
+                <option value="to-read">To Read</option>
+            </select>
+            <button onclick="addBook()">Add Book</button>
+        </div>
+
+        <!-- Existing Books Section -->
+        <div id="bookList" class="section">
+            <h3>Existing Books</h3>
+            <!-- Books will be displayed here -->
+        </div>
+
+        <!-- Suggested Reading Section -->
+        <div id="suggestedReading" class="section">
+            <h3>Suggested Reading</h3>
+            <ul>
+                <li><a href="https://www.goodreads.com/book/show/5470.1984" target="_blank">1984 by George Orwell</a></li>
+                <li><a href="https://www.goodreads.com/book/show/1885.Pride_and_Prejudice" target="_blank">Pride and Prejudice by Jane Austen</a></li>
+                <li><a href="https://www.goodreads.com/book/show/2657.To_Kill_a_Mockingbird" target="_blank">To Kill a Mockingbird by Harper Lee</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const bookTracker = {
+    books: [],
+    // Getter for books
+    getBooks: function() {
+        return this.books;
+    },
+    // Setter for books
+    setBooks: function(books) {
+        this.books = books;
+        this.updateBookList();
+    },
+    addBook: function (book) {
+        this.books.push(book);
+        this.updateBookList();
+    },
+    // Using apply() to add books from an array
+    addBooksFromArray: function (booksArray) {
+        // Apply function to add multiple books at once
+        this.addBook.apply(this, booksArray);
+    },
+    updateBookList: function () {
+        const bookList = document.getElementById('bookList');
+        bookList.innerHTML = ''; // Clear the list before updating
+
+        // Using arrow function for processing books
+        this.books.forEach((book, index) => {
+            const card = document.createElement('div');
+            card.className = 'book-card';
+            const gradients = [
+                'linear-gradient(to right, #ff9a9e, #fad0c4)',
+                'linear-gradient(to right, #6a11cb, #2575fc)',
+                'linear-gradient(to right, #ff7e5f, #feb47b)',
+                'linear-gradient(to right, #ff9a9e, #a18cd1)',
+                'linear-gradient(to right, #ffecd2, #fcb69f)'
+            ];
+            card.style.background = gradients[index % gradients.length];
+            card.innerHTML = `
+                <h4>${book.title}</h4>
+                <p><strong>Author:</strong> ${book.author}</p>
+                <p><strong>Genre:</strong> ${book.genre}</p>
+                <p><strong>Status:</strong> ${book.status}</p>
+            `;
+            bookList.appendChild(card);
+        });
+    }
+};
+
+// Adding a new book
+function addBook() {
+    const title = document.getElementById('book-title').value;
+    const author = document.getElementById('book-author').value;
+    const genre = document.getElementById('book-genre').value;
+    const status = document.getElementById('book-status').value;
+
+    if (title && author) {
+        const newBook = { title, author, genre, status };
+        bookTracker.addBook(newBook);
+        document.getElementById('book-title').value = ''; // Clear input fields
+        document.getElementById('book-author').value = '';
+    } else {
+        alert('Please provide both title and author');
+    }
+}
+
+// Example usage of bind() and call()
+const newBookDetails = { title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', genre: 'Classic', status: 'read' };
+
+// Using bind to create a bound version of addBook
+const addBookBound = bookTracker.addBook.bind(bookTracker, newBookDetails);
+addBookBound();
+
+// Using call() to add another book immediately
+bookTracker.addBook.call(bookTracker, { title: 'The Diary of Anne Frank', author: 'Anne Frank', genre: 'Biography', status: 'to-read' });
+
+
+// Initializing with existing books
+bookTracker.addBook({ title: 'The Hobbit', author: 'J.R.R. Tolkien', genre: 'Fantasy', status: 'read' });
+
+    </script>
+
+</body>
+</html>
