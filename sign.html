@@ -3,129 +3,254 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up - FINEPRINT</title>
+    <title>FinePrint Registration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+        * {
             margin: 0;
             padding: 0;
-            background-image: url('lib.avif'); /* Background image */
-            background-size: cover; /* Ensure the image covers the entire page */
-            background-position: center; /* Center the background image */
-            background-repeat: no-repeat; /* Prevent the background from repeating */
+            box-sizing: border-box;
         }
 
-        .signup-container {
+        body {
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f6d5f7 0%, #fbe9d7 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            color: #2c3e50;
+        }
+
+        header {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        section {
+            background: rgba(255, 255, 255, 0.95);
+            max-width: 600px;
             width: 100%;
-            max-width: 500px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.8); /* Slight transparency for readability */
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
         }
 
         h2 {
+            font-size: 1.8rem;
+            color: #34495e;
+            margin-bottom: 30px;
             text-align: center;
-            margin-bottom: 20px;
         }
 
-        .input-group {
-            margin-bottom: 15px;
-        }
-
-        .input-group label {
-            display: block;
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-
-        .input-group input,
-        .input-group select,
-        .input-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        .input-group textarea {
-            resize: vertical;
-        }
-
-        .signup-btn {
-            width: 100%;
-            padding: 12px;
-            background-color: #007BFF;
-            color: white;
+        fieldset {
             border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            cursor: pointer;
+            margin-bottom: 30px;
         }
 
-        .signup-btn:hover {
-            background-color: #0056b3;
+        legend {
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        legend::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #f6d5f7, #fbe9d7);
+            border-radius: 2px;
+        }
+
+        label {
+            font-size: 1rem;
+            font-weight: 500;
+            display: block;
+            margin: 15px 0 8px;
+            color: #34495e;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: #fff;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #f6d5f7;
+            box-shadow: 0 0 0 4px rgba(246, 213, 247, 0.1);
+        }
+
+        .button-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px 20px;
+            font-size: 1rem;
+            font-weight: 500;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #f6d5f7 0%, #fbe9d7 100%);
+            color: #2c3e50;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        button[type="submit"] {
+            background: linear-gradient(135deg, #fbe9d7 0%, #f6d5f7 100%);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        footer {
+            margin-top: 30px;
+            color: #2c3e50;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        @media (max-width: 480px) {
+            section {
+                padding: 20px;
+            }
+            
+            .button-container {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="signup-container">
-        <h2>Create Your Account</h2>
-        <form action="#" method="POST" class="signup-form">
-            <div class="input-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+   
+    <header>
+        Register for FinePrint
+    </header>
+
+    <section>
+        <h2>User Registration</h2>
+        <form id="registrationForm" onsubmit="return validateForm()">
+            <div id="step1">
+                <fieldset>
+                    <legend>Personal Information</legend>
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required placeholder="Choose a username">
+                    
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required placeholder="Enter your email">
+                    
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required placeholder="Create a password">
+                </fieldset>
+                <div class="button-container">
+                    <button type="button" onclick="nextStep(2)">Next</button>
+                </div>
             </div>
-            <div class="input-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            
+            <div id="step2" class="hidden">
+                <fieldset>
+                    <legend>Book Tracking Preferences</legend>
+                    <label for="favorite_genre">Favorite Genre:</label>
+                    <select name="favorite_genre" id="favorite_genre" required>
+                        <option value="fiction">Fiction</option>
+                        <option value="nonfiction">Non-fiction</option>
+                        <option value="mystery">Mystery</option>
+                        <option value="fantasy">Fantasy</option>
+                    </select>
+                    
+                    <label for="reading_goal">Yearly Reading Goal:</label>
+                    <input type="number" id="reading_goal" name="reading_goal" min="1" required placeholder="Books per year">
+                </fieldset>
+                <div class="button-container">
+                    <button type="button" onclick="prevStep(1)">Previous</button>
+                    <button type="button" onclick="nextStep(3)">Next</button>
+                </div>
             </div>
-            <div class="input-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Create a password" required>
+            
+            <div id="step3" class="hidden">
+                <fieldset>
+                    <legend>Wishlist & Mood-Based Suggestions</legend>
+                    <label for="wishlist">Books Wishlist:</label>
+                    <input type="text" id="wishlist" name="wishlist" placeholder="Add a book to your wishlist">
+                    
+                    <label for="mood">Current Mood:</label>
+                    <select name="mood" id="mood" required>
+                        <option value="adventurous">Adventurous</option>
+                        <option value="calm">Calm</option>
+                        <option value="romantic">Romantic</option>
+                        <option value="motivated">Motivated</option>
+                    </select>
+                </fieldset>
+                <div class="button-container">
+                    <button type="button" onclick="prevStep(2)">Previous</button>
+                    <button type="submit">Register</button>
+                </div>
             </div>
-            <div class="input-group">
-                <label for="confirm-password">Confirm Password</label>
-                <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" required>
-            </div>
-            <div class="input-group">
-                <label for="dob">Date of Birth</label>
-                <input type="date" id="dob" name="dob" required>
-            </div>
-            <div class="input-group">
-                <label for="gender">Gender</label>
-                <select id="gender" name="gender" required>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="other">Other</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label for="phone">Phone Number</label>
-                <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
-            </div>
-            <div class="input-group">
-                <label for="address">Address</label>
-                <textarea id="address" name="address" rows="3" placeholder="Enter your address" required></textarea>
-            </div>
-            <div class="input-group">
-                <label for="country">Country</label>
-                <input type="text" id="country" name="country" placeholder="Enter your country" required>
-            </div>
-            <div class="input-group">
-                <label for="profile-picture">Profile Picture</label>
-                <input type="file" id="profile-picture" name="profile-picture">
-            </div>
-            <div class="input-group">
-                <label for="terms">
-                    <input type="checkbox" id="terms" name="terms" required> I agree to the Terms and Conditions
-                </label>
-            </div>
-            <button type="submit" class="signup-btn">Sign Up</button>
         </form>
-    </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 FinePrint. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        function nextStep(step) {
+            if (validateStep(step - 1)) {
+                document.getElementById('step' + (step - 1)).classList.add('hidden');
+                document.getElementById('step' + step).classList.remove('hidden');
+            }
+        }
+        function prevStep(step) {
+            document.getElementById('step' + (step + 1)).classList.add('hidden');
+            document.getElementById('step' + step).classList.remove('hidden');
+        }
+        function validateStep(step) {
+            let isValid = true;
+            let fields = document.querySelectorAll(`#step${step} input[required], #step${step} select[required]`);
+            fields.forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    field.style.border = "2px solid red";
+                } else {
+                    field.style.border = "";
+                }
+            });
+            if (!isValid) alert("Please fill out all required fields.");
+            return isValid;
+        }
+    </script>
 </body>
 </html>
