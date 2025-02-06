@@ -1,124 +1,258 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Book Club Events</title>
-  <style>
-    .event-card {
-      border: 1px solid #ddd;
-      margin: 10px;
-      padding: 15px;
-    }
-    .hidden { display: none; }
-  </style>
+    <meta charset="UTF-8">
+    <title>Book Club Events</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f6f0ff 0%, #f7f0ff 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #2d3436;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            font-weight: 600;
+        }
+
+        #event-filters {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        input, select {
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        input:focus, select:focus {
+            border-color: #6c5ce7;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(108,92,231,0.1);
+        }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            background: #6c5ce7;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108,92,231,0.2);
+        }
+
+        #clear-filters {
+            background: #ff7675;
+        }
+
+        #events-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .event-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .event-card h2 {
+            color: #2d3436;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .event-card p {
+            color: #636e72;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .rsvp-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #6c5ce7 0%, #a594f9 100%);
+        }
+
+        .rsvp-btn:disabled {
+            background: #b2bec3;
+            transform: none;
+            cursor: not-allowed;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            #event-filters {
+                flex-direction: column;
+            }
+            
+            input, select, button {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div id="event-filters">
-    <select id="genre-filter">
-      <option value="">All Genres</option>
-      <option value="fiction">Fiction</option>
-      <option value="non-fiction">Non-Fiction</option>
-      <option value="sci-fi">Sci-Fi</option>
-    </select>
-    <input type="date" id="date-filter">
-    <button id="clear-filters">Clear Filters</button>
-  </div>
-  <div id="events-container">
-    <div class="event-card" data-genre="fiction" data-date="2024-03-15">
-      <h2>Science Fiction Book Club</h2>
-      <p>Virtual meetup discussing latest sci-fi novels</p>
-      <button class="rsvp-btn">RSVP</button>
+    <div class="container">
+        <h1>📚 Book Club Events</h1>
+        
+        <div id="event-filters">
+            <input type="text" id="search" placeholder="Search events...">
+            <select id="genre-filter">
+                <option value="">All Genres</option>
+                <option value="fiction">Fiction</option>
+                <option value="non-fiction">Non-Fiction</option>
+                <option value="sci-fi">Sci-Fi</option>
+            </select>
+            <input type="date" id="date-filter">
+            <button id="clear-filters">Clear Filters</button>
+        </div>
+
+        <div id="events-container">
+            <div class="event-card" data-genre="fiction" data-date="2024-03-15">
+                <h2>Science Fiction Book Club</h2>
+                <p>Virtual meetup discussing latest sci-fi novels</p>
+                <button class="rsvp-btn">RSVP</button>
+            </div>
+            <div class="event-card" data-genre="non-fiction" data-date="2024-04-20">
+                <h2>Biography Writers Talk</h2>
+                <p>Panel discussion with biography authors</p>
+                <button class="rsvp-btn">RSVP</button>
+            </div>
+        </div>
     </div>
-    <div class="event-card" data-genre="non-fiction" data-date="2024-04-20">
-      <h2>Biography Writers Talk</h2>
-      <p>Panel discussion with biography authors</p>
-      <button class="rsvp-btn">RSVP</button>
-    </div>
-  </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const genreFilter = document.getElementById('genre-filter');
-      const dateFilter = document.getElementById('date-filter');
-      const clearFiltersBtn = document.getElementById('clear-filters');
-      const eventCards = document.querySelectorAll('.event-card');
-      const rsvpButtons = document.querySelectorAll('.rsvp-btn');
-      
-      // Genre Filter Event Listener
-      genreFilter.addEventListener('change', filterEvents);
-      // Date Filter Event Listener
-      dateFilter.addEventListener('change', filterEvents);
-      // Clear Filters Event Listener
-      clearFiltersBtn.addEventListener('click', () => {
-        genreFilter.value = '';
-        dateFilter.value = '';
-        filterEvents();
-      });
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const genreFilter = document.getElementById('genre-filter');
+            const dateFilter = document.getElementById('date-filter');
+            const clearFiltersBtn = document.getElementById('clear-filters');
+            const eventCards = document.querySelectorAll('.event-card');
+            const rsvpButtons = document.querySelectorAll('.rsvp-btn');
 
-      // RSVP Button Event Listeners
-      rsvpButtons.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const eventTitle = e.target.closest('.event-card').querySelector('h2').textContent;
-          alert(`You've RSVP'd to: ${eventTitle}`);
-          e.target.disabled = true;
-          e.target.textContent = 'Registered';
+            // 1. Genre Filter Event Listener
+            genreFilter.addEventListener('change', filterEvents);
+
+            // 2. Date Filter Event Listener
+            dateFilter.addEventListener('change', filterEvents);
+
+            // 3. Clear Filters Event Listener
+            clearFiltersBtn.addEventListener('click', () => {
+                genreFilter.value = '';
+                dateFilter.value = '';
+                filterEvents();
+            });
+
+            // 4. RSVP Button Event Listeners
+            rsvpButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const eventTitle = e.target.closest('.event-card').querySelector('h2').textContent;
+                    alert(`You've RSVP'd to: ${eventTitle}`);
+                    e.target.disabled = true;
+                    e.target.textContent = 'Registered';
+                });
+            });
+
+            // 5. Hover Effect Event Listeners
+            eventCards.forEach(card => {
+                card.addEventListener('mouseenter', (e) => {
+                    e.target.style.backgroundColor = '#f0f0f0';
+                });
+                card.addEventListener('mouseleave', (e) => {
+                    e.target.style.backgroundColor = '';
+                });
+            });
+
+            // 6. Keyboard Accessibility Event Listener
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const focusedRsvpBtn = document.querySelector('.rsvp-btn:focus');
+                    if (focusedRsvpBtn) {
+                        focusedRsvpBtn.click();
+                    }
+                }
+            });
+
+            // 7. Search Event Listener
+            const searchInput = document.createElement('input');
+            searchInput.setAttribute('type', 'text');
+            searchInput.setAttribute('placeholder', 'Search events');
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                eventCards.forEach(card => {
+                    const eventText = card.textContent.toLowerCase();
+                    card.classList.toggle('hidden', !eventText.includes(searchTerm));
+                });
+            });
+            document.getElementById('event-filters').prepend(searchInput);
+
+            // 8. Window Resize Event Listener for Responsive Design
+            window.addEventListener('resize', () => {
+                const containerWidth = document.getElementById('events-container').clientWidth;
+                eventCards.forEach(card => {
+                    card.style.width = containerWidth < 600 ? '100%' : '45%';
+                });
+            });
+
+            function filterEvents() {
+                const selectedGenre = genreFilter.value;
+                const selectedDate = dateFilter.value;
+
+                eventCards.forEach(card => {
+                    const cardGenre = card.dataset.genre;
+                    const cardDate = card.dataset.date;
+
+                    const genreMatch = !selectedGenre || cardGenre === selectedGenre;
+                    const dateMatch = !selectedDate || cardDate === selectedDate;
+
+                    card.classList.toggle('hidden', !(genreMatch && dateMatch));
+                });
+            }
         });
-      });
-
-      // Hover Effect Event Listeners
-      eventCards.forEach(card => {
-        card.addEventListener('mouseenter', (e) => {
-          e.target.style.backgroundColor = '#f0f0f0';
-        });
-        card.addEventListener('mouseleave', (e) => {
-          e.target.style.backgroundColor = '';
-        });
-      });
-
-      // Keyboard Accessibility Event Listener
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-          const focusedRsvpBtn = document.querySelector('.rsvp-btn:focus');
-          if (focusedRsvpBtn) {
-            focusedRsvpBtn.click();
-          }
-        }
-      });
-
-      // Add Search Input
-      const searchInput = document.createElement('input');
-      searchInput.setAttribute('type', 'text');
-      searchInput.setAttribute('placeholder', 'Search events');
-      searchInput.addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        eventCards.forEach(card => {
-          const eventText = card.textContent.toLowerCase();
-          card.classList.toggle('hidden', !eventText.includes(searchTerm));
-        });
-      });
-      document.getElementById('event-filters').prepend(searchInput);
-
-      // Window Resize Event Listener for Responsive Design
-      window.addEventListener('resize', () => {
-        const containerWidth = document.getElementById('events-container').clientWidth;
-        eventCards.forEach(card => {
-          card.style.width = containerWidth < 600 ? '100%' : '45%';
-        });
-      });
-
-      // Filter Events based on selected filters
-      function filterEvents() {
-        const selectedGenre = genreFilter.value;
-        const selectedDate = dateFilter.value;
-        eventCards.forEach(card => {
-          const cardGenre = card.dataset.genre;
-          const cardDate = card.dataset.date;
-          const genreMatch = !selectedGenre || cardGenre === selectedGenre;
-          const dateMatch = !selectedDate || cardDate === selectedDate;
-          card.classList.toggle('hidden', !(genreMatch && dateMatch));
-        });
-      }
-    });
-  </script>
+    </script>
 </body>
 </html>
