@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINEPRINT Community Hub</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(45deg, #FF69B4, #FF9BE3, #B5B9FF, #85FFC7);
+            --secondary-gradient: linear-gradient(45deg, #85FFC7, #B5B9FF, #FF9BE3, #FF69B4);
+            --primary-color: #FF69B4;
+            --secondary-color: #85FFC7;
+            --accent-color: #B5B9FF;
+            --text-color: #2c3e50;
+            --border-radius: 15px;
+            --box-shadow: 0 4px 15px rgba(255, 105, 180, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: var(--primary-gradient);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            border: 3px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            bottom: -3px;
+            left: -3px;
+            z-index: -1;
+            border-radius: var(--border-radius);
+            background: var(--primary-gradient);
+        }
+
+        .header h1 {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.2rem;
+        }
+
+        .post-form {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+            box-shadow: var(--box-shadow);
+            border: 3px solid var(--secondary-color);
+        }
+
+        .post-input {
+            width: 100%;
+            padding: 1rem;
+            border: 3px solid var(--accent-color);
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+            resize: vertical;
+            min-height: 100px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .post-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(255, 105, 180, 0.3);
+        }
+
+        .btn {
+            background: var(--secondary-gradient);
+            background-size: 300% 300%;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            background-position: 100% 50%;
+        }
+
+        .post {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1.5rem;
+            box-shadow: var(--box-shadow);
+            border-left: 5px solid var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        .post:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(255, 105, 180, 0.3);
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .post-header strong {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        .post-header span {
+            color: #666;
+            font-size: 0.9rem;
+            background: var(--secondary-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            color: white;
+        }
+
+        .post p {
+            margin-bottom: 1rem;
+            line-height: 1.8;
+            color: #444;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .post-actions .btn {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+
+        .post-actions .btn:hover {
+            background: var(--primary-gradient);
+            color: white;
+            border-color: transparent;
+        }
+
+        .comments-section {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid var(--accent-color);
+        }
+
+        .comment {
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+            background: rgba(181, 185, 255, 0.1);
+            border-radius: var(--border-radius);
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .comment strong {
+            color: var(--primary-color);
+        }
+
+        .comment-form {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .comment-form input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 2px solid var(--accent-color);
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+        }
+
+        .comment-form input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(255, 105, 180, 0.2);
+        }
+
+        .fa-heart {
+            color: var(--primary-color);
+            margin-right: 0.5rem;
+        }
+
+        .fa-comment {
+            color: var(--secondary-color);
+            margin-right: 0.5rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .post {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .btn:active {
+            animation: pulse 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Rest of the HTML and JavaScript code remains exactly the same -->
+    <div class="container">
+        <div class="header">
+            <h1>FINEPRINT Community Hub</h1>
+            <p>Connect with fellow readers and share your thoughts!</p>
+        </div>
+
+        <div class="post-form">
+            <textarea class="post-input" id="postContent" placeholder="Share your thoughts about a book..."></textarea>
+            <button class="btn" onclick="createPost()">Post</button>
+        </div>
+
+        <div class="posts-container" id="postsContainer">
+            <!-- Posts will appear here -->
+        </div>
+    </div>
+
+    <script>
+        // All the original JavaScript code remains exactly the same
+        let posts = [];
+        let postId = 0;
+
+        function createPost() {
+            const content = $('#postContent').val().trim();
+            
+            if (content) {
+                const newPost = {
+                    id: ++postId,
+                    author: 'You',
+                    content: content,
+                    likes: 0,
+                    comments: [],
+                    timestamp: new Date().toLocaleString()
+                };
+
+                posts.unshift(newPost);
+                $('#postContent').val('');
+                displayPost(newPost);
+                alert('Post created successfully!');
+            } else {
+                alert('Please write something before posting!');
+            }
+        }
+
+        function displayPost(post) {
+            const postHtml = `
+                <div class="post" data-post-id="${post.id}">
+                    <div class="post-header">
+                        <strong>${post.author}</strong>
+                        <span>${post.timestamp}</span>
+                    </div>
+                    <p>${post.content}</p>
+                    <div class="post-actions">
+                        <button class="btn" onclick="likePost(${post.id})">
+                            <i class="fas fa-heart"></i> 
+                            <span class="likes-count">${post.likes}</span>
+                        </button>
+                        <button class="btn" onclick="toggleComments(${post.id})">
+                            <i class="fas fa-comment"></i> Comment
+                        </button>
+                    </div>
+                    <div class="comments-section" id="comments-${post.id}" style="display: none;">
+                        <div class="comments-container">
+                            ${post.comments.map(comment => `
+                                <div class="comment">
+                                    <strong>${comment.author}:</strong> ${comment.content}
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="comment-form">
+                            <input type="text" class="post-input" placeholder="Write a comment...">
+                            <button class="btn" onclick="addComment(${post.id})">Send</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            $('#postsContainer').prepend(postHtml);
+        }
+
+        function likePost(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (post) {
+                post.likes++;
+                $(`.post[data-post-id="${postId}"] .likes-count`).text(post.likes);
+            }
+        }
+
+        function toggleComments(postId) {
+            $(`#comments-${postId}`).slideToggle();
+        }
+
+        function addComment(postId) {
+            const post = posts.find(p => p.id === postId);
+            const commentInput = $(`.post[data-post-id="${postId}"] .comment-form input`);
+            const content = commentInput.val().trim();
+
+            if (content && post) {
+                const newComment = {
+                    author: 'You',
+                    content: content,
+                    timestamp: new Date().toLocaleString()
+                };
+
+                post.comments.push(newComment);
+                
+                const commentHtml = `
+                    <div class="comment">
+                        <strong>${newComment.author}:</strong> ${newComment.content}
+                    </div>
+                `;
+
+                $(`.post[data-post-id="${postId}"] .comments-container`).append(commentHtml);
+                commentInput.val('');
+            }
+        }
+
+        $(document).ready(function() {
+            createPost('Welcome to the FINEPRINT Community Hub! Share your favorite books and thoughts here.');
+        });
+    </script>
+</body>
+</html>

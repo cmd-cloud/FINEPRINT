@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookshelf Organizer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .container {
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin-bottom: 10px;
+            color: #6a0572;
+        }
+        .timer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            background: #fff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .bookshelf {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            gap: 10px;
+        }
+        .category {
+            width: 30%;
+            min-height: 300px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
+            transition: 0.3s;
+        }
+        .category:hover {
+            transform: scale(1.03);
+        }
+        .book {
+            padding: 10px;
+            margin: 10px;
+            background: #ffdd57;
+            cursor: grab;
+            border-radius: 8px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+            transition: 0.2s;
+        }
+        .book:active {
+            cursor: grabbing;
+            transform: scale(0.95);
+        }
+        .favorite {
+            background: #ff80ab !important;
+        }
+        input {
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            width: 80%;
+            margin-bottom: 10px;
+            outline: none;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            background: #ff6b81;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #ff3b5c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📚 Bookshelf Organizer</h1>
+        <div class="timer">
+            <span id="timer">00:00</span>
+            <button onclick="toggleTimer()">Start</button>
+        </div>
+        <input type="text" id="newBook" placeholder="Enter book title and press Enter">
+        <div class="bookshelf">
+            <div class="category" id="to-read" ondrop="drop(event, 'to-read')" ondragover="allowDrop(event)">
+                <h2>📘 To Read</h2>
+            </div>
+            <div class="category" id="reading" ondrop="drop(event, 'reading')" ondragover="allowDrop(event)">
+                <h2>📖 Reading <span id="readingTimer">00:00</span></h2>
+            </div>
+            <div class="category" id="completed" ondrop="drop(event, 'completed')" ondragover="allowDrop(event)">
+                <h2>✅ Completed</h2>
+            </div>
+        </div>
+    </div>
+    <script>
+        let draggedBook = null;
+        let readingTime = 0;
+        let isTimerActive = false;
+        let timerInterval;
+
+        function toggleTimer() {
+            isTimerActive = !isTimerActive;
+            document.querySelector(".timer button").textContent = isTimerActive ? "Stop" : "Start";
+            if (isTimerActive) {
+                timerInterval = setInterval(() => {
+                    readingTime++;
+                    document.getElementById("timer").textContent = formatTime(readingTime);
+                }, 1000);
+            } else {
+                clearInterval(timerInterval);
+            }
+        }
+
+        function formatTime(seconds) {
+            let mins = Math.floor(seconds / 60);
+            let secs = seconds % 60;
+            return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        document.getElementById("newBook").addEventListener("keypress", function(event) {
+            if (event.key === "Enter" && this.value.trim() !== "") {
+                let book = document.createElement("div");
+                book.textContent = this.value;
+                book.className = "book";
+                book.draggable = true;
+                book.addEventListener("dragstart", () => draggedBook = book);
+                book.addEventListener("dblclick", editBook);
+                book.addEventListener("contextmenu", removeBook);
+                document.getElementById("to-read").appendChild(book);
+                this.value = "";
+            }
+        });
+
+        function editBook(event) {
+            let newTitle = prompt("Edit book title:", event.target.textContent);
+            if (newTitle) event.target.textContent = newTitle;
+        }
+
+        function removeBook(event) {
+            event.preventDefault();
+            if (confirm("Remove this book?")) event.target.remove();
+        }
+
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function drop(event, status) {
+            event.preventDefault();
+            if (draggedBook) {
+                document.getElementById(status).appendChild(draggedBook);
+                draggedBook = null;
+            }
+        }
+    </script>
+</body>
+</html>
