@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINEPRINT Community Hub</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+:root {
+            --primary-gradient: linear-gradient(45deg, #6A5ACD, #7B68EE, #9370DB, #BA55D3);
+            --secondary-gradient: linear-gradient(45deg, #20B2AA, #3CB371, #2E8B57, #00CED1);
+            --primary-color: #6A5ACD;
+            --secondary-color: #20B2AA;
+            --accent-color: #9370DB;
+            --text-color: #2c3e50;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 15px rgba(106, 90, 205, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: var(--primary-gradient);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .header h1 {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .post-form {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+            box-shadow: var(--box-shadow);
+        }
+
+        .post-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--accent-color);
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            background: var(--secondary-gradient);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .post {
+            background: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1.5rem;
+            box-shadow: var(--box-shadow);
+            position: relative;
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .comments-section {
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .comment {
+            background: rgba(147, 112, 219, 0.1);
+            padding: 0.8rem;
+            margin-bottom: 0.5rem;
+            border-radius: var(--border-radius);
+        }
+
+        .comment-form {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .comment-form input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 2px solid var(--accent-color);
+            border-radius: var(--border-radius);
+        /* All previous CSS remains the same */
+        .error-message {
+            background-color: #ffdddd;
+            color: #ff0000;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>FINEPRINT Community Hub</h1>
+            <p>Connect with fellow readers and share your thoughts!</p>
+        </div>
+
+        <div id="errorContainer"></div>
+
+        <div class="post-form">
+            <textarea class="post-input" id="postContent" placeholder="Share your thoughts about a book..."></textarea>
+            <button class="btn" id="createPostBtn">Post</button>
+        </div>
+
+        <div id="loadingIndicator" class="loading" style="display:none;">
+            Loading posts...
+        </div>
+
+        <div class="posts-container" id="postsContainer">
+            <!-- Posts will appear here -->
+        </div>
+    </div>
+
+    <script>
+        class CommunityHubAjax {
+            constructor() {
+                this.posts = [];
+                this.postId = 0;
+                this.initEventListeners();
+                this.loadPosts();
+            }
+
+            initEventListeners() {
+                const createPostBtn = document.getElementById('createPostBtn');
+                createPostBtn.addEventListener('click', () => this.createPost());
+            }
+
+            // Simulated AJAX methods using Fetch API and localStorage
+            async fetchPosts() {
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        const storedPosts = JSON.parse(localStorage.getItem('posts') || '[]');
+                        resolve(storedPosts);
+                    }, 500);
+                });
+            }
+
+            async savePosts(posts) {
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        localStorage.setItem('posts', JSON.stringify(posts));
+                        resolve(true);
+                    }, 300);
+                });
+            }
+
+            async loadPosts() {
+                const loadingIndicator = document.getElementById('loadingIndicator');
+                const postsContainer = document.getElementById('postsContainer');
+                
+                try {
+                    loadingIndicator.style.display = 'block';
+                    postsContainer.innerHTML = ''; // Clear existing posts
+
+                    // Simulate AJAX request to fetch posts
+                    const posts = await this.fetchPosts();
+                    
+                    if (posts.length === 0) {
+                        // Create a welcome post if no posts exist
+                        await this.createPost('Welcome to FINEPRINT Community Hub! Share your favorite books and thoughts here.', true);
+                    }
+
+                    this.posts = posts;
+                    this.postId = posts.length > 0 ? Math.max(...posts.map(p => p.id)) : 0;
+                    
+                    posts.forEach(post => this.displayPost(post));
+                } catch (error) {
+                    this.showError('Failed to load posts');
+                } finally {
+                    loadingIndicator.style.display = 'none';
+                }
+            }
+
+            async createPost(content = null, isSystemPost = false) {
+                const postContentEl = document.getElementById('postContent');
+                content = content || postContentEl.value.trim();
+
+                if (!content) {
+                    this.showError('Please write something before posting!');
+                    return;
+                }
+
+                try {
+                    const newPost = {
+                        id: ++this.postId,
+                        author: isSystemPost ? 'FINEPRINT' : 'You',
+                        content: content,
+                        likes: 0,
+                        comments: [],
+                        timestamp: new Date().toLocaleString()
+                    };
+
+                    // Simulate AJAX request to save post
+                    this.posts.unshift(newPost);
+                    await this.savePosts(this.posts);
+
+                    if (!isSystemPost) {
+                        postContentEl.value = '';
+                    }
+
+                    this.displayPost(newPost);
+                    
+                    if (!isSystemPost) {
+                        this.showSuccess('Post created successfully!');
+                    }
+                } catch (error) {
+                    this.showError('Failed to create post');
+                }
+            }
+
+            async likePost(postId) {
+                try {
+                    const postIndex = this.posts.findIndex(p => p.id === postId);
+                    if (postIndex !== -1) {
+                        this.posts[postIndex].likes++;
+                        await this.savePosts(this.posts);
+                        
+                        // Update likes in the UI
+                        const likesCountEl = document.querySelector(`.post[data-post-id="${postId}"] .likes-count`);
+                        if (likesCountEl) {
+                            likesCountEl.textContent = this.posts[postIndex].likes;
+                        }
+                    }
+                } catch (error) {
+                    this.showError('Failed to like post');
+                }
+            }
+
+            async addComment(postId) {
+                try {
+                    const postIndex = this.posts.findIndex(p => p.id === postId);
+                    if (postIndex !== -1) {
+                        const commentInput = document.querySelector(`.post[data-post-id="${postId}"] .comment-form input`);
+                        const content = commentInput.value.trim();
+
+                        if (content) {
+                            const newComment = {
+                                author: 'You',
+                                content: content,
+                                timestamp: new Date().toLocaleString()
+                            };
+
+                            this.posts[postIndex].comments.push(newComment);
+                            await this.savePosts(this.posts);
+
+                            // Update comments in the UI
+                            const commentsContainer = document.querySelector(`.post[data-post-id="${postId}"] .comments-container`);
+                            if (commentsContainer) {
+                                const commentHtml = `
+                                    <div class="comment">
+                                        <strong>${newComment.author}:</strong> ${newComment.content}
+                                    </div>
+                                `;
+                                commentsContainer.insertAdjacentHTML('beforeend', commentHtml);
+                                commentInput.value = '';
+                            }
+                        }
+                    }
+                } catch (error) {
+                    this.showError('Failed to add comment');
+                }
+            }
+
+            displayPost(post) {
+                const postsContainer = document.getElementById('postsContainer');
+                const postElement = document.createElement('div');
+                postElement.classList.add('post');
+                postElement.dataset.postId = post.id;
+
+                postElement.innerHTML = `
+                    <div class="post-header">
+                        <strong>${post.author}</strong>
+                        <span>${post.timestamp}</span>
+                    </div>
+                    <p>${post.content}</p>
+                    <div class="post-actions">
+                        <button class="btn" onclick="communityHub.likePost(${post.id})">
+                            <i class="fas fa-heart"></i> 
+                            <span class="likes-count">${post.likes}</span>
+                        </button>
+                        <button class="btn" onclick="communityHub.toggleComments(${post.id})">
+                            <i class="fas fa-comment"></i> Comment
+                        </button>
+                    </div>
+                    <div class="comments-section" id="comments-${post.id}" style="display: none;">
+                        <div class="comments-container">
+                            ${post.comments.map(comment => `
+                                <div class="comment">
+                                    <strong>${comment.author}:</strong> ${comment.content}
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="comment-form">
+                            <input type="text" class="post-input" placeholder="Write a comment...">
+                            <button class="btn" onclick="communityHub.addComment(${post.id})">Send</button>
+                        </div>
+                    </div>
+                `;
+
+                postsContainer.insertBefore(postElement, postsContainer.firstChild);
+            }
+
+            toggleComments(postId) {
+                const commentsSection = document.getElementById(`comments-${postId}`);
+                commentsSection.style.display = commentsSection.style.display === 'none' ? 'block' : 'none';
+            }
+
+            showError(message) {
+                const errorContainer = document.getElementById('errorContainer');
+                const errorElement = document.createElement('div');
+                errorElement.classList.add('error-message');
+                errorElement.textContent = message;
+                
+                errorContainer.appendChild(errorElement);
+                
+                // Remove error after 3 seconds
+                setTimeout(() => {
+                    errorContainer.removeChild(errorElement);
+                }, 3000);
+            }
+
+            showSuccess(message) {
+                const errorContainer = document.getElementById('errorContainer');
+                const successElement = document.createElement('div');
+                successElement.style.backgroundColor = '#ddffdd';
+                successElement.style.color = '#00aa00';
+                successElement.style.padding = '10px';
+                successElement.style.marginBottom = '15px';
+                successElement.style.borderRadius = '5px';
+                successElement.textContent = message;
+                
+                errorContainer.appendChild(successElement);
+                
+                // Remove success message after 3 seconds
+                setTimeout(() => {
+                    errorContainer.removeChild(successElement);
+                }, 3000);
+            }
+        }
+
+        // Initialize the community hub
+        const communityHub = new CommunityHubAjax();
+    </script>
+</body>
+</html>
