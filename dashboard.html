@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Tracker Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+        #dashboard {
+            background: white;
+            width: 80%;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .logo img {
+            width: 50px;
+            height: 50px;
+        }
+        h2 {
+            color: #5a37aa;
+            text-align: center;
+            margin: 0;
+        }
+        p {
+            text-align: center;
+            color: #000000;
+            margin: 10px 0;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .section h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .book-card {
+            width: 150px;
+            height: 250px;
+            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px;
+            display: inline-block;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        .book-card:hover {
+            transform: scale(1.05);
+        }
+        .book-cover {
+            width: 100%;
+            height: 120px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .book-info {
+            text-align: center;
+        }
+        .book-info h4 {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+        .book-info p {
+            margin: 3px 0;
+            font-size: 12px;
+            color: white;
+        }
+        input[type="text"], select {
+            padding: 10px;
+            width: 80%;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 12px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #bookList {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .profile-img {
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            margin-right: 15px;
+            object-fit: cover;
+        }
+        .profile-info {
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="dashboard">
+        <div class="logo">
+            <img src="/api/placeholder/50/50" alt="Logo">
+            <h2>FINEPRINT</h2>
+        </div>
+        <p><i class="fas fa-feather-alt"></i> WHERE EVERY BOOK FINDS ITS SHELF</p>
+
+        <div id="user-profile" class="section">
+            <h3>User Profile</h3>
+            <div class="profile-info">
+                <img src="/api/placeholder/80/80" alt="Profile Picture" class="profile-img">
+                <div>
+                    <div><label for="user-name">Name:</label> <span id="user-name">Kai Azer</span></div>
+                    <div><label for="member-since">Member Since:</label> <span id="member-since">January 2022</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="add-book" class="section">
+            <h3>Add a New Book</h3>
+            <input type="text" id="book-title" placeholder="Book Title" required>
+            <input type="text" id="book-author" placeholder="Author" required>
+            <select id="book-genre">
+                <option value="Fantasy">Fantasy</option>
+                <option value="Mystery">Mystery</option>
+                <option value="Romance">Romance</option>
+                <option value="Adventure">Adventure</option>
+                <option value="Sci-Fi">Sci-Fi</option>
+            </select>
+            <select id="book-status">
+                <option value="read">Read</option>
+                <option value="in-progress">In Progress</option>
+                <option value="to-read">To Read</option>
+            </select>
+            <button onclick="addBook()">Add Book</button>
+        </div>
+
+        <div id="bookList" class="section">
+            <h3>Your Books</h3>
+        </div>
+
+        <script>
+            const bookCovers = {
+                 'Harry Potter and the Philosopher Stone': 'hp.jpeg',
+                 'The Great Gatsby': 'gatsby.jpeg',
+                 'Onyx Storm': 'onyxstorm.jpeg'
+            };
+            const initialBooks = [
+                 
+                { title: 'Harry Potter and the Philospher Stone', author: 'J K Rowling', genre: 'Fantasy', status: 'read' },
+                { title: 'The Great Gatsby', author: 'F. Scott Fitzgerald', genre: 'Classic', status: 'read' },
+                { title: 'Onyx Storm', author: 'Rebacca Yarros', genre: 'Fantasy Romance', status: 'to-read' }
+            ];
+
+            const bookTracker = {
+                books: initialBooks,
+                
+                updateBookList: function() {
+                    const bookList = document.getElementById('bookList');
+                    bookList.innerHTML = '<h3>Your Books</h3>';
+
+                    this.books.forEach((book, index) => {
+                        const card = document.createElement('div');
+                        card.className = 'book-card';
+                        const gradients = [
+                            'linear-gradient(to right, #ff9a9e, #fad0c4)',
+                            'linear-gradient(to right, #6a11cb, #2575fc)',
+                            'linear-gradient(to right, #ff7e5f, #feb47b)',
+                            'linear-gradient(to right, #ff9a9e, #a18cd1)',
+                            'linear-gradient(to right, #ffecd2, #fcb69f)'
+                        ];
+                        card.style.background = gradients[index % gradients.length];
+                        const coverUrl = bookCovers[book.title] || '/api/placeholder/150/200';
+                        card.innerHTML = `
+                            
+                            <div class="book-cover" style="background-image: url('${coverUrl}')"></div>
+                            <div class="book-info">
+                                <h4>${book.title}</h4>
+                                <p><i class="fas fa-user"></i> ${book.author}</p>
+                                <p><i class="fas fa-bookmark"></i> ${book.genre}</p>
+                                <p><i class="fas fa-tasks"></i> ${book.status}</p>
+                            </div>
+                        `;
+                        bookList.appendChild(card);
+                    });
+                }
+            };
+
+            window.onload = function() {
+                bookTracker.updateBookList();
+            };
+
+            function addBook() {
+                const title = document.getElementById('book-title').value;
+                const author = document.getElementById('book-author').value;
+                const genre = document.getElementById('book-genre').value;
+                const status = document.getElementById('book-status').value;
+
+                if (title && author) {
+                    bookTracker.books.push({ title, author, genre, status });
+                    bookTracker.updateBookList();
+                    
+                    document.getElementById('book-title').value = '';
+                    document.getElementById('book-author').value = '';
+                }
+            }
+        </script>
+    </div>
+</body>
+</html>
